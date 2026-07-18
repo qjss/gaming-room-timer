@@ -11,6 +11,7 @@ databases:
   # 免费版 PostgreSQL（90 天后会休眠，但免费空间持续可用）
   - name: gaming-room-db
     plan: free
+    region: singapore  # 必须与 Web Service 同 region，否则内部 DNS 不可达
     databaseName: gaming_room
     user: gaming_room
     ipAllowList: []  # 允许所有 IP 访问（同 Region 默认内网访问）

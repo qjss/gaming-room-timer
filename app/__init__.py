@@ -1,4 +1,4 @@
-﻿import os
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -44,3 +44,7 @@ def create_app():
         db.create_all()
     
     return app
+
+# 在包级别暴露 WSGI 可调用对象，方便 gunicorn / flask 解析 app:app
+app = create_app()
+

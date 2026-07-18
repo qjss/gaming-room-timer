@@ -1,4 +1,4 @@
-﻿# 🎮 电玩店包间计时管理系统
+# 🎮 电玩店包间计时管理系统
 
 一个简单易用的主机电玩店包间计时管理系统，支持多包间管理、实时计时、结账等功能。
 
@@ -51,8 +51,10 @@ cd gaming-room-timer
 # 安装依赖
 pip install -r requirements.txt
 
-# 运行应用
-python app.py
+# 启动（任选其一）
+flask --app app run --host=0.0.0.0 --port=5000
+# 或者
+gunicorn app:app -b 0.0.0.0:5000
 ```
 
 打开浏览器访问 http://localhost:5000
@@ -134,3 +136,4 @@ game-room-timer/
 ## 📝 License
 
 MIT License
+

@@ -1,0 +1,34 @@
+﻿# Render Blueprint - 电玩店包间计时管理系统
+# 
+# 使用方法:
+# 1. Fork 这个仓库到你的 GitHub
+# 2. 登录 Render (https://render.com)
+# 3. 点击 ""New"" -> ""Blueprint""
+# 4. 连接你的 GitHub 仓库
+# 5. Render 会自动读取这个文件并创建服务
+
+services:
+  # Web 应用
+  - type: web
+    name: gaming-room-timer
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    plan: free
+    healthCheckPath: /
+    regions:
+      - singapore  # 离中国较近的节点
+    envVars:
+      - key: DATABASE_URL
+        sync: false  # 你需要在 Render 后台设置这个
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FLASK_ENV
+        value: production
+
+  # PostgreSQL 数据库
+  - type: postgres
+    name: gaming-room-db
+    plan: free
+    ipAllowList: []  # 允许所有 IP 访问
+    databaseName: gaming_room

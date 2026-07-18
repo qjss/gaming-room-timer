@@ -1,0 +1,695 @@
+﻿<!DOCTYPE html>
+<html lang=""zh-CN"">
+<head>
+    <meta charset=""UTF-8"">
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <title>电玩店包间管理系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 28px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card .value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .room-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .room-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .room-header {
+            padding: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .room-card.available .room-header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .room-card.in-use .room-header {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        }
+        
+        .room-name {
+            font-size: 22px;
+            font-weight: bold;
+        }
+        
+        .console-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .room-body {
+            padding: 25px;
+        }
+        
+        .room-info {
+            margin-bottom: 20px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .timer-display {
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .customer-name {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        
+        .price-display {
+            text-align: center;
+            color: #eb3349;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-start {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+        
+        .btn-end {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .modal h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .modal-buttons .btn {
+            flex: 1;
+        }
+        
+        .btn-cancel {
+            background: #eee;
+            color: #666;
+        }
+        
+        .history-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+        
+        .history-section h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .history-table th, .history-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .history-table th {
+            background: #f8f9fa;
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-active {
+            background: #38ef7d;
+            color: white;
+        }
+        
+        .status-ended {
+            background: #ccc;
+            color: white;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .in-use .timer-display {
+            animation: pulse 2s infinite;
+        }
+        
+        .refresh-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .init-btn {
+            background: #f45c43;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class=""container"">
+        <header>
+            <h1>🎮 电玩店包间管理系统</h1>
+            <div class=""stats"">
+                <div class=""stat-card"">
+                    <h3>当前使用</h3>
+                    <div class=""value"" id=""activeCount"">0</div>
+                </div>
+                <div class=""stat-card"">
+                    <h3>今日收入</h3>
+                    <div class=""value"">¥<span id=""todayIncome"">0</span></div>
+                </div>
+                <div class=""stat-card"">
+                    <h3>今日订单</h3>
+                    <div class=""value"" id=""todaySessions"">0</div>
+                </div>
+            </div>
+            <div style=""display: flex; gap: 10px;"">
+                <button class=""init-btn"" onclick=""initRooms()"">初始化包间</button>
+                <button class=""refresh-btn"" onclick=""loadData()"">🔄 刷新</button>
+            </div>
+        </header>
+        
+        <div class=""rooms-grid"" id=""roomsGrid"">
+            <!-- 包间卡片将在这里动态生成 -->
+        </div>
+        
+        <div class=""history-section"">
+            <h2>📋 历史记录</h2>
+            <table class=""history-table"">
+                <thead>
+                    <tr>
+                        <th>包间</th>
+                        <th>顾客</th>
+                        <th>开始时间</th>
+                        <th>时长</th>
+                        <th>金额</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+                <tbody id=""historyBody"">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- 开始计时模态框 -->
+    <div class=""modal"" id=""startModal"">
+        <div class=""modal-content"">
+            <h2>🎮 开始计时</h2>
+            <div class=""form-group"">
+                <label>包间名称</label>
+                <input type=""text"" id=""modalRoomName"" readonly>
+            </div>
+            <div class=""form-group"">
+                <label>每小时价格</label>
+                <input type=""text"" id=""modalHourlyRate"" readonly>
+            </div>
+            <div class=""form-group"">
+                <label>顾客名称（选填）</label>
+                <input type=""text"" id=""customerName"" placeholder=""散客"">
+            </div>
+            <div class=""modal-buttons"">
+                <button class=""btn btn-cancel"" onclick=""closeModal('startModal')"">取消</button>
+                <button class=""btn btn-start"" onclick=""confirmStart()"">开始计时</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 结束计时确认模态框 -->
+    <div class=""modal"" id=""endModal"">
+        <div class=""modal-content"">
+            <h2>⏹️ 结束计时</h2>
+            <div class=""form-group"">
+                <label>包间名称</label>
+                <input type=""text"" id=""endRoomName"" readonly>
+            </div>
+            <div class=""form-group"">
+                <label>顾客名称</label>
+                <input type=""text"" id=""endCustomerName"" readonly>
+            </div>
+            <div class=""form-group"">
+                <label>时长</label>
+                <input type=""text"" id=""endDuration"" readonly>
+            </div>
+            <div class=""form-group"">
+                <label>应付金额</label>
+                <input type=""text"" id=""endCost"" readonly style=""font-size: 24px; color: #eb3349; font-weight: bold;"">
+            </div>
+            <div class=""modal-buttons"">
+                <button class=""btn btn-cancel"" onclick=""closeModal('endModal')"">取消</button>
+                <button class=""btn btn-end"" onclick=""confirmEnd()"">确认结账</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentRoomId = null;
+        let currentSessionId = null;
+        let timerInterval = null;
+        
+        const API_BASE = '/api';
+        
+        // 加载数据
+        async function loadData() {
+            await Promise.all([
+                loadRooms(),
+                loadHistory(),
+                loadStats()
+            ]);
+        }
+        
+        // 加载包间状态
+        async function loadRooms() {
+            try {
+                const response = await fetch(${API_BASE}/rooms/status/all);
+                const rooms = await response.json();
+                renderRooms(rooms);
+            } catch (error) {
+                console.error('加载包间失败:', error);
+            }
+        }
+        
+        // 渲染包间卡片
+        function renderRooms(rooms) {
+            const grid = document.getElementById('roomsGrid');
+            grid.innerHTML = rooms.map(room => {
+                const statusClass = room.in_use ? 'in-use' : 'available';
+                const session = room.session;
+                
+                let bodyContent = '';
+                
+                if (room.in_use) {
+                    const duration = session.duration_minutes || 0;
+                    const hours = Math.floor(duration / 60);
+                    const mins = duration % 60;
+                    bodyContent = 
+                        <div class=""timer-display"" id=""timer-"">
+                            :
+                        </div>
+                        <div class=""customer-name"">👤 </div>
+                        <div class=""price-display"">¥</div>
+                        <button class=""btn btn-end"" onclick=""showEndModal(, )"">
+                            ⏹️ 结账
+                        </button>
+                    ;
+                } else {
+                    bodyContent = 
+                        <div class=""room-info"">
+                            <div class=""info-row"">
+                                <span>💰 每小时价格</span>
+                                <span>¥</span>
+                            </div>
+                            <div class=""info-row"">
+                                <span>📺 游戏机</span>
+                                <span></span>
+                            </div>
+                        </div>
+                        <button class=""btn btn-start"" onclick=""showStartModal()"">
+                            ▶️ 开始计时
+                        </button>
+                    ;
+                }
+                
+                return 
+                    <div class=""room-card "">
+                        <div class=""room-header"">
+                            <span class=""room-name""></span>
+                            <span class=""console-badge""></span>
+                        </div>
+                        <div class=""room-body"">
+                            
+                        </div>
+                    </div>
+                ;
+            }).join('');
+        }
+        
+        // 加载历史记录
+        async function loadHistory() {
+            try {
+                const response = await fetch(${API_BASE}/sessions);
+                const sessions = await response.json();
+                renderHistory(sessions);
+            } catch (error) {
+                console.error('加载历史失败:', error);
+            }
+        }
+        
+        // 渲染历史记录
+        function renderHistory(sessions) {
+            const tbody = document.getElementById('historyBody');
+            tbody.innerHTML = sessions.slice(0, 20).map(session => {
+                const startTime = new Date(session.start_time);
+                const duration = session.duration_minutes || 0;
+                const hours = Math.floor(duration / 60);
+                const mins = duration % 60;
+                const statusClass = session.status === 'active' ? 'status-active' : 'status-ended';
+                const statusText = session.status === 'active' ? '使用中' : '已结束';
+                
+                return 
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>小时分钟</td>
+                        <td>¥</td>
+                        <td><span class=""status-badge ""></span></td>
+                    </tr>
+                ;
+            }).join('');
+        }
+        
+        // 加载统计数据
+        async function loadStats() {
+            try {
+                const response = await fetch(${API_BASE}/statistics);
+                const stats = await response.json();
+                document.getElementById('activeCount').textContent = stats.active_sessions;
+                document.getElementById('todayIncome').textContent = stats.today_income;
+                document.getElementById('todaySessions').textContent = stats.today_sessions;
+            } catch (error) {
+                console.error('加载统计失败:', error);
+            }
+        }
+        
+        // 显示开始计时模态框
+        async function showStartModal(roomId) {
+            currentRoomId = roomId;
+            try {
+                const response = await fetch(${API_BASE}/rooms/);
+                const room = await response.json();
+                document.getElementById('modalRoomName').value = room.name;
+                document.getElementById('modalHourlyRate').value = '¥' + room.hourly_rate + '/小时';
+                document.getElementById('customerName').value = '';
+                document.getElementById('startModal').classList.add('active');
+            } catch (error) {
+                console.error('获取包间信息失败:', error);
+            }
+        }
+        
+        // 确认开始计时
+        async function confirmStart() {
+            const customerName = document.getElementById('customerName').value || '散客';
+            
+            try {
+                const response = await fetch(${API_BASE}/rooms//start, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({customer_name: customerName})
+                });
+                
+                if (response.ok) {
+                    closeModal('startModal');
+                    loadData();
+                } else {
+                    const error = await response.json();
+                    alert(error.error || '开始计时失败');
+                }
+            } catch (error) {
+                console.error('开始计时失败:', error);
+            }
+        }
+        
+        // 显示结束计时模态框
+        async function showEndModal(roomId, sessionId) {
+            currentRoomId = roomId;
+            currentSessionId = sessionId;
+            
+            try {
+                const response = await fetch(${API_BASE}/sessions/);
+                const session = await response.json();
+                
+                document.getElementById('endRoomName').value = session.room_name;
+                document.getElementById('endCustomerName').value = session.customer_name;
+                
+                const duration = session.duration_minutes || 0;
+                const hours = Math.floor(duration / 60);
+                const mins = duration % 60;
+                document.getElementById('endDuration').value = ${hours}小时分钟;
+                document.getElementById('endCost').value = '¥' + session.cost;
+                
+                document.getElementById('endModal').classList.add('active');
+            } catch (error) {
+                console.error('获取会话信息失败:', error);
+            }
+        }
+        
+        // 确认结束计时
+        async function confirmEnd() {
+            try {
+                const response = await fetch(${API_BASE}/sessions//end, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'}
+                });
+                
+                if (response.ok) {
+                    const session = await response.json();
+                    alert(结账成功！金额：¥);
+                    closeModal('endModal');
+                    loadData();
+                } else {
+                    const error = await response.json();
+                    alert(error.error || '结束计时失败');
+                }
+            } catch (error) {
+                console.error('结束计时失败:', error);
+            }
+        }
+        
+        // 关闭模态框
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        // 初始化包间
+        async function initRooms() {
+            if (!confirm('确定要初始化默认包间吗？')) return;
+            
+            try {
+                const response = await fetch(${API_BASE}/rooms/init, {method: 'POST'});
+                if (response.ok) {
+                    alert('包间初始化成功！');
+                    loadData();
+                }
+            } catch (error) {
+                console.error('初始化包间失败:', error);
+            }
+        }
+        
+        // 定时更新计时器
+        function updateTimers() {
+            const timerElements = document.querySelectorAll('[id^=""timer-""]');
+            timerElements.forEach(el => {
+                const roomId = el.id.replace('timer-', '');
+                // 重新获取该包间的状态
+                fetch(${API_BASE}/rooms//status)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.in_use && data.session) {
+                            const duration = data.session.duration_minutes || 0;
+                            const hours = Math.floor(duration / 60);
+                            const mins = duration % 60;
+                            el.textContent = ${hours}:;
+                        }
+                    })
+                    .catch(console.error);
+            });
+        }
+        
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            // 每分钟更新一次计时器
+            setInterval(updateTimers, 60000);
+        });
+        
+        // 点击模态框外部关闭
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

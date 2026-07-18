@@ -1,28 +1,21 @@
 ﻿<!DOCTYPE html>
-<html lang=""zh-CN"">
+<html lang="zh-CN">
 <head>
-    <meta charset=""UTF-8"">
-    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>电玩店包间管理系统</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
+
+        .container { max-width: 1400px; margin: 0 auto; }
+
         header {
             background: white;
             padding: 20px 30px;
@@ -32,43 +25,34 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
-        
-        h1 {
-            color: #333;
-            font-size: 28px;
-        }
-        
-        .stats {
-            display: flex;
-            gap: 20px;
-        }
-        
+
+        h1 { color: #333; font-size: 26px; }
+
+        .stats { display: flex; gap: 15px; flex-wrap: wrap; }
+
         .stat-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 15px 25px;
+            padding: 12px 20px;
             border-radius: 10px;
             text-align: center;
+            min-width: 110px;
         }
-        
-        .stat-card h3 {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 5px;
-        }
-        
-        .stat-card .value {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        
+
+        .stat-card h3 { font-size: 13px; opacity: 0.9; margin-bottom: 4px; }
+        .stat-card .value { font-size: 22px; font-weight: bold; }
+
+        .toolbar { display: flex; gap: 10px; }
+
         .rooms-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 25px;
         }
-        
+
         .room-card {
             background: white;
             border-radius: 15px;
@@ -76,11 +60,9 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             transition: transform 0.3s;
         }
-        
-        .room-card:hover {
-            transform: translateY(-5px);
-        }
-        
+
+        .room-card:hover { transform: translateY(-5px); }
+
         .room-header {
             padding: 20px;
             color: white;
@@ -88,75 +70,68 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .room-card.available .room-header {
             background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
         }
-        
+
         .room-card.in-use .room-header {
             background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
         }
-        
-        .room-name {
-            font-size: 22px;
-            font-weight: bold;
-        }
-        
+
+        .room-name { font-size: 22px; font-weight: bold; }
+
         .console-badge {
             background: rgba(255,255,255,0.2);
             padding: 5px 12px;
             border-radius: 20px;
             font-size: 14px;
         }
-        
-        .room-body {
-            padding: 25px;
-        }
-        
-        .room-info {
-            margin-bottom: 20px;
-        }
-        
+
+        .room-body { padding: 25px; }
+
+        .room-info { margin-bottom: 20px; }
+
         .info-row {
             display: flex;
             justify-content: space-between;
             padding: 8px 0;
             border-bottom: 1px solid #eee;
         }
-        
-        .info-row:last-child {
-            border-bottom: none;
-        }
-        
+
+        .info-row:last-child { border-bottom: none; }
+
         .timer-display {
-            font-size: 36px;
+            font-size: 38px;
             font-weight: bold;
             color: #333;
             text-align: center;
-            padding: 20px;
+            padding: 18px;
             background: #f8f9fa;
             border-radius: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 1px;
         }
-        
+
         .customer-name {
             text-align: center;
             color: #666;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
             font-size: 16px;
         }
-        
+
         .price-display {
             text-align: center;
             color: #eb3349;
-            font-size: 28px;
+            font-size: 26px;
             font-weight: bold;
             margin-bottom: 20px;
         }
-        
+
         .btn {
             width: 100%;
-            padding: 15px;
+            padding: 14px;
             border: none;
             border-radius: 10px;
             font-size: 16px;
@@ -164,89 +139,70 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        
+
         .btn-start {
             background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             color: white;
         }
-        
+
         .btn-end {
             background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
             color: white;
         }
-        
-        .btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
+
+        .btn:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: rgba(0,0,0,0.5);
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
-        
-        .modal.active {
-            display: flex;
-        }
-        
+
+        .modal.active { display: flex; }
+
         .modal-content {
             background: white;
             padding: 30px;
             border-radius: 15px;
             width: 90%;
-            max-width: 400px;
+            max-width: 420px;
         }
-        
-        .modal h2 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
+
+        .modal h2 { margin-bottom: 20px; color: #333; }
+
+        .form-group { margin-bottom: 18px; }
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             color: #666;
+            font-size: 14px;
         }
-        
-        .form-group input, .form-group select {
+
+        .form-group input,
+        .form-group select {
             width: 100%;
             padding: 12px;
             border: 2px solid #eee;
             border-radius: 8px;
             font-size: 16px;
         }
-        
-        .form-group input:focus, .form-group select:focus {
+
+        .form-group input:focus,
+        .form-group select:focus {
             outline: none;
             border-color: #667eea;
         }
-        
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .modal-buttons .btn {
-            flex: 1;
-        }
-        
-        .btn-cancel {
-            background: #eee;
-            color: #666;
-        }
-        
+
+        .modal-buttons { display: flex; gap: 10px; }
+        .modal-buttons .btn { flex: 1; }
+        .btn-cancel { background: #eee; color: #666; }
+
         .history-section {
             background: white;
             padding: 30px;
@@ -254,107 +210,115 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             margin-top: 30px;
         }
-        
-        .history-section h2 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-        
-        .history-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
+
+        .history-section h2 { margin-bottom: 20px; color: #333; }
+
+        .history-table { width: 100%; border-collapse: collapse; }
         .history-table th, .history-table td {
-            padding: 12px;
+            padding: 10px 12px;
             text-align: left;
             border-bottom: 1px solid #eee;
+            font-size: 14px;
         }
-        
+
         .history-table th {
             background: #f8f9fa;
             color: #666;
             font-weight: 600;
         }
-        
+
         .status-badge {
-            padding: 5px 12px;
+            padding: 4px 10px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: bold;
+            display: inline-block;
         }
-        
-        .status-active {
-            background: #38ef7d;
-            color: white;
-        }
-        
-        .status-ended {
-            background: #ccc;
-            color: white;
-        }
-        
+
+        .status-active { background: #38ef7d; color: white; }
+        .status-ended { background: #ccc; color: white; }
+
         @keyframes pulse {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+            50% { opacity: 0.75; }
         }
-        
-        .in-use .timer-display {
-            animation: pulse 2s infinite;
-        }
-        
-        .refresh-btn {
-            background: #667eea;
+
+        .in-use .timer-display { animation: pulse 2s infinite; }
+
+        .refresh-btn, .init-btn, .add-btn {
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 18px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
         }
-        
-        .init-btn {
-            background: #f45c43;
+
+        .refresh-btn { background: #667eea; }
+        .init-btn   { background: #f45c43; }
+        .add-btn    { background: #11998e; }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: #333;
             color: white;
-            border: none;
-            padding: 10px 20px;
             border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
+            z-index: 2000;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success { background: #11998e; }
+        .toast.error   { background: #eb3349; }
+
+        @media (max-width: 720px) {
+            header { flex-direction: column; align-items: flex-start; }
+            h1 { font-size: 22px; }
         }
     </style>
 </head>
 <body>
-    <div class=""container"">
+    <div class="container">
         <header>
             <h1>🎮 电玩店包间管理系统</h1>
-            <div class=""stats"">
-                <div class=""stat-card"">
+            <div class="stats">
+                <div class="stat-card">
                     <h3>当前使用</h3>
-                    <div class=""value"" id=""activeCount"">0</div>
+                    <div class="value" id="activeCount">0</div>
                 </div>
-                <div class=""stat-card"">
+                <div class="stat-card">
                     <h3>今日收入</h3>
-                    <div class=""value"">¥<span id=""todayIncome"">0</span></div>
+                    <div class="value">¥<span id="todayIncome">0</span></div>
                 </div>
-                <div class=""stat-card"">
+                <div class="stat-card">
                     <h3>今日订单</h3>
-                    <div class=""value"" id=""todaySessions"">0</div>
+                    <div class="value" id="todaySessions">0</div>
                 </div>
             </div>
-            <div style=""display: flex; gap: 10px;"">
-                <button class=""init-btn"" onclick=""initRooms()"">初始化包间</button>
-                <button class=""refresh-btn"" onclick=""loadData()"">🔄 刷新</button>
+            <div class="toolbar">
+                <button class="add-btn" onclick="showAddRoomModal()">➕ 新增包间</button>
+                <button class="init-btn" onclick="initRooms()">🎯 初始化包间</button>
+                <button class="refresh-btn" onclick="loadData()">🔄 刷新</button>
             </div>
         </header>
-        
-        <div class=""rooms-grid"" id=""roomsGrid"">
+
+        <div class="rooms-grid" id="roomsGrid">
             <!-- 包间卡片将在这里动态生成 -->
         </div>
-        
-        <div class=""history-section"">
+
+        <div class="history-section">
             <h2>📋 历史记录</h2>
-            <table class=""history-table"">
+            <table class="history-table">
                 <thead>
                     <tr>
                         <th>包间</th>
@@ -365,197 +329,249 @@
                         <th>状态</th>
                     </tr>
                 </thead>
-                <tbody id=""historyBody"">
+                <tbody id="historyBody">
                 </tbody>
             </table>
         </div>
     </div>
-    
+
     <!-- 开始计时模态框 -->
-    <div class=""modal"" id=""startModal"">
-        <div class=""modal-content"">
+    <div class="modal" id="startModal">
+        <div class="modal-content">
             <h2>🎮 开始计时</h2>
-            <div class=""form-group"">
+            <div class="form-group">
                 <label>包间名称</label>
-                <input type=""text"" id=""modalRoomName"" readonly>
+                <input type="text" id="modalRoomName" readonly>
             </div>
-            <div class=""form-group"">
+            <div class="form-group">
                 <label>每小时价格</label>
-                <input type=""text"" id=""modalHourlyRate"" readonly>
+                <input type="text" id="modalHourlyRate" readonly>
             </div>
-            <div class=""form-group"">
+            <div class="form-group">
                 <label>顾客名称（选填）</label>
-                <input type=""text"" id=""customerName"" placeholder=""散客"">
+                <input type="text" id="customerName" placeholder="散客">
             </div>
-            <div class=""modal-buttons"">
-                <button class=""btn btn-cancel"" onclick=""closeModal('startModal')"">取消</button>
-                <button class=""btn btn-start"" onclick=""confirmStart()"">开始计时</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 结束计时确认模态框 -->
-    <div class=""modal"" id=""endModal"">
-        <div class=""modal-content"">
-            <h2>⏹️ 结束计时</h2>
-            <div class=""form-group"">
-                <label>包间名称</label>
-                <input type=""text"" id=""endRoomName"" readonly>
-            </div>
-            <div class=""form-group"">
-                <label>顾客名称</label>
-                <input type=""text"" id=""endCustomerName"" readonly>
-            </div>
-            <div class=""form-group"">
-                <label>时长</label>
-                <input type=""text"" id=""endDuration"" readonly>
-            </div>
-            <div class=""form-group"">
-                <label>应付金额</label>
-                <input type=""text"" id=""endCost"" readonly style=""font-size: 24px; color: #eb3349; font-weight: bold;"">
-            </div>
-            <div class=""modal-buttons"">
-                <button class=""btn btn-cancel"" onclick=""closeModal('endModal')"">取消</button>
-                <button class=""btn btn-end"" onclick=""confirmEnd()"">确认结账</button>
+            <div class="modal-buttons">
+                <button class="btn btn-cancel" onclick="closeModal('startModal')">取消</button>
+                <button class="btn btn-start" onclick="confirmStart()">开始计时</button>
             </div>
         </div>
     </div>
 
+    <!-- 结束计时确认模态框 -->
+    <div class="modal" id="endModal">
+        <div class="modal-content">
+            <h2>⏹️ 结束计时</h2>
+            <div class="form-group">
+                <label>包间名称</label>
+                <input type="text" id="endRoomName" readonly>
+            </div>
+            <div class="form-group">
+                <label>顾客名称</label>
+                <input type="text" id="endCustomerName" readonly>
+            </div>
+            <div class="form-group">
+                <label>时长</label>
+                <input type="text" id="endDuration" readonly>
+            </div>
+            <div class="form-group">
+                <label>应付金额</label>
+                <input type="text" id="endCost" readonly style="font-size: 22px; color: #eb3349; font-weight: bold;">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-cancel" onclick="closeModal('endModal')">取消</button>
+                <button class="btn btn-end" onclick="confirmEnd()">确认结账</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增包间模态框 -->
+    <div class="modal" id="addRoomModal">
+        <div class="modal-content">
+            <h2>➕ 新增包间</h2>
+            <div class="form-group">
+                <label>包间名称</label>
+                <input type="text" id="newRoomName" placeholder="例如：包间5">
+            </div>
+            <div class="form-group">
+                <label>游戏机类型</label>
+                <select id="newRoomConsole">
+                    <option value="PS5">PS5</option>
+                    <option value="Xbox">Xbox</option>
+                    <option value="Switch">Switch</option>
+                    <option value="PC">PC</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>每小时价格（元）</label>
+                <input type="number" id="newRoomRate" value="30" min="0" step="0.5">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-cancel" onclick="closeModal('addRoomModal')">取消</button>
+                <button class="btn btn-start" onclick="confirmAddRoom()">确认新增</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除包间模态框 -->
+    <div class="modal" id="deleteRoomModal">
+        <div class="modal-content">
+            <h2>🗑️ 删除包间</h2>
+            <p id="deleteRoomText" style="margin-bottom: 18px; color:#555;">确定删除该包间吗？</p>
+            <div class="modal-buttons">
+                <button class="btn btn-cancel" onclick="closeModal('deleteRoomModal')">取消</button>
+                <button class="btn btn-end" onclick="confirmDeleteRoom()">确认删除</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
     <script>
         let currentRoomId = null;
         let currentSessionId = null;
-        let timerInterval = null;
-        
+        let deleteRoomId = null;
+
         const API_BASE = '/api';
-        
-        // 加载数据
-        async function loadData() {
-            await Promise.all([
-                loadRooms(),
-                loadHistory(),
-                loadStats()
-            ]);
+
+        function showToast(msg, type) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast show ' + (type || '');
+            clearTimeout(showToast._t);
+            showToast._t = setTimeout(() => { t.className = 'toast'; }, 2500);
         }
-        
-        // 加载包间状态
+
+        function fmtDuration(min) {
+            const h = Math.floor(min / 60);
+            const m = min % 60;
+            return (h > 0 ? h + '小时' : '') + m + '分钟';
+        }
+
+        function fmtClock(min) {
+            const h = Math.floor(min / 60);
+            const m = min % 60;
+            return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+        }
+
+        async function loadData() {
+            await Promise.all([loadRooms(), loadHistory(), loadStats()]);
+        }
+
         async function loadRooms() {
             try {
-                const response = await fetch(${API_BASE}/rooms/status/all);
+                const response = await fetch(API_BASE + '/rooms/status/all');
+                if (!response.ok) throw new Error('HTTP ' + response.status);
                 const rooms = await response.json();
                 renderRooms(rooms);
             } catch (error) {
                 console.error('加载包间失败:', error);
+                showToast('加载包间失败', 'error');
             }
         }
-        
-        // 渲染包间卡片
+
         function renderRooms(rooms) {
             const grid = document.getElementById('roomsGrid');
-            grid.innerHTML = rooms.map(room => {
+            if (!rooms.length) {
+                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:white;font-size:18px;padding:40px;">还没有包间，点上方“🎯 初始化包间”按钮快速创建 4 个默认包间 🎮</p>';
+                return;
+            }
+
+            grid.innerHTML = rooms.map(function (room) {
                 const statusClass = room.in_use ? 'in-use' : 'available';
                 const session = room.session;
-                
-                let bodyContent = '';
-                
+                const roomInfo = room.room;
+
+                let bodyContent;
                 if (room.in_use) {
                     const duration = session.duration_minutes || 0;
-                    const hours = Math.floor(duration / 60);
-                    const mins = duration % 60;
-                    bodyContent = 
-                        <div class=""timer-display"" id=""timer-"">
-                            :
-                        </div>
-                        <div class=""customer-name"">👤 </div>
-                        <div class=""price-display"">¥</div>
-                        <button class=""btn btn-end"" onclick=""showEndModal(, )"">
-                            ⏹️ 结账
-                        </button>
-                    ;
+                    const cost = session.cost || 0;
+                    bodyContent =
+                        '<div class="timer-display" data-room-id="' + roomInfo.id + '">' +
+                            fmtClock(duration) +
+                        '</div>' +
+                        '<div class="customer-name">👤 ' + (session.customer_name || '散客') + '</div>' +
+                        '<div class="price-display">¥' + cost.toFixed(2) + '</div>' +
+                        '<button class="btn btn-end" onclick="showEndModal(' + roomInfo.id + ',' + session.id + ')">⏹️ 结账</button>';
                 } else {
-                    bodyContent = 
-                        <div class=""room-info"">
-                            <div class=""info-row"">
-                                <span>💰 每小时价格</span>
-                                <span>¥</span>
-                            </div>
-                            <div class=""info-row"">
-                                <span>📺 游戏机</span>
-                                <span></span>
-                            </div>
-                        </div>
-                        <button class=""btn btn-start"" onclick=""showStartModal()"">
-                            ▶️ 开始计时
-                        </button>
-                    ;
+                    bodyContent =
+                        '<div class="room-info">' +
+                            '<div class="info-row"><span>💰 每小时价格</span><span>¥' + roomInfo.hourly_rate + '</span></div>' +
+                            '<div class="info-row"><span>📺 游戏机</span><span>' + roomInfo.console_type + '</span></div>' +
+                        '</div>' +
+                        '<div style="display:flex;gap:8px;">' +
+                            '<button class="btn btn-start" style="flex:1;" onclick="showStartModal(' + roomInfo.id + ')">▶️ 开始计时</button>' +
+                            '<button class="btn btn-end" style="flex:0 0 110px;" onclick="askDeleteRoom(' + roomInfo.id + ',\'' + roomInfo.name.replace(/'/g, "\\'") + '\')">🗑️ 删除</button>' +
+                        '</div>';
                 }
-                
-                return 
-                    <div class=""room-card "">
-                        <div class=""room-header"">
-                            <span class=""room-name""></span>
-                            <span class=""console-badge""></span>
-                        </div>
-                        <div class=""room-body"">
-                            
-                        </div>
-                    </div>
-                ;
+
+                return (
+                    '<div class="room-card ' + statusClass + '">' +
+                        '<div class="room-header">' +
+                            '<span class="room-name">' + roomInfo.name + '</span>' +
+                            '<span class="console-badge">' + roomInfo.console_type + '</span>' +
+                        '</div>' +
+                        '<div class="room-body">' + bodyContent + '</div>' +
+                    '</div>'
+                );
             }).join('');
         }
-        
-        // 加载历史记录
+
         async function loadHistory() {
             try {
-                const response = await fetch(${API_BASE}/sessions);
+                const response = await fetch(API_BASE + '/sessions');
+                if (!response.ok) throw new Error('HTTP ' + response.status);
                 const sessions = await response.json();
                 renderHistory(sessions);
             } catch (error) {
                 console.error('加载历史失败:', error);
             }
         }
-        
-        // 渲染历史记录
+
         function renderHistory(sessions) {
             const tbody = document.getElementById('historyBody');
-            tbody.innerHTML = sessions.slice(0, 20).map(session => {
-                const startTime = new Date(session.start_time);
+            if (!sessions.length) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#999;padding:24px;">暂无记录</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = sessions.slice(0, 20).map(function (session) {
+                const startTime = session.start_time ? new Date(session.start_time).toLocaleString('zh-CN') : '-';
                 const duration = session.duration_minutes || 0;
-                const hours = Math.floor(duration / 60);
-                const mins = duration % 60;
+                const cost = session.cost || 0;
                 const statusClass = session.status === 'active' ? 'status-active' : 'status-ended';
                 const statusText = session.status === 'active' ? '使用中' : '已结束';
-                
-                return 
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>小时分钟</td>
-                        <td>¥</td>
-                        <td><span class=""status-badge ""></span></td>
-                    </tr>
-                ;
+
+                return (
+                    '<tr>' +
+                        '<td>' + (session.room_name || '-') + '</td>' +
+                        '<td>' + (session.customer_name || '散客') + '</td>' +
+                        '<td>' + startTime + '</td>' +
+                        '<td>' + fmtDuration(duration) + '</td>' +
+                        '<td>¥' + cost.toFixed(2) + '</td>' +
+                        '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>' +
+                    '</tr>'
+                );
             }).join('');
         }
-        
-        // 加载统计数据
+
         async function loadStats() {
             try {
-                const response = await fetch(${API_BASE}/statistics);
+                const response = await fetch(API_BASE + '/statistics');
+                if (!response.ok) throw new Error('HTTP ' + response.status);
                 const stats = await response.json();
-                document.getElementById('activeCount').textContent = stats.active_sessions;
-                document.getElementById('todayIncome').textContent = stats.today_income;
-                document.getElementById('todaySessions').textContent = stats.today_sessions;
+                document.getElementById('activeCount').textContent = stats.active_sessions || 0;
+                document.getElementById('todayIncome').textContent = (stats.today_income || 0).toFixed(2);
+                document.getElementById('todaySessions').textContent = stats.today_sessions || 0;
             } catch (error) {
                 console.error('加载统计失败:', error);
             }
         }
-        
-        // 显示开始计时模态框
+
         async function showStartModal(roomId) {
             currentRoomId = roomId;
             try {
-                const response = await fetch(${API_BASE}/rooms/);
+                const response = await fetch(API_BASE + '/rooms/' + roomId);
                 const room = await response.json();
                 document.getElementById('modalRoomName').value = room.name;
                 document.getElementById('modalHourlyRate').value = '¥' + room.hourly_rate + '/小时';
@@ -563,131 +579,228 @@
                 document.getElementById('startModal').classList.add('active');
             } catch (error) {
                 console.error('获取包间信息失败:', error);
+                showToast('获取包间信息失败', 'error');
             }
         }
-        
-        // 确认开始计时
+
         async function confirmStart() {
             const customerName = document.getElementById('customerName').value || '散客';
-            
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = '处理中...';
+
             try {
-                const response = await fetch(${API_BASE}/rooms//start, {
+                const response = await fetch(API_BASE + '/rooms/' + currentRoomId + '/start', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({customer_name: customerName})
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ customer_name: customerName })
                 });
-                
+
                 if (response.ok) {
                     closeModal('startModal');
-                    loadData();
+                    showToast('开始计时成功！', 'success');
+                    await loadData();
                 } else {
-                    const error = await response.json();
-                    alert(error.error || '开始计时失败');
+                    const err = await response.json().catch(function () { return {}; });
+                    showToast(err.error || '开始计时失败', 'error');
                 }
             } catch (error) {
                 console.error('开始计时失败:', error);
+                showToast('网络错误', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '开始计时';
             }
         }
-        
-        // 显示结束计时模态框
+
         async function showEndModal(roomId, sessionId) {
             currentRoomId = roomId;
             currentSessionId = sessionId;
-            
             try {
-                const response = await fetch(${API_BASE}/sessions/);
+                const response = await fetch(API_BASE + '/sessions/' + sessionId);
+                if (!response.ok) throw new Error('HTTP ' + response.status);
                 const session = await response.json();
-                
-                document.getElementById('endRoomName').value = session.room_name;
-                document.getElementById('endCustomerName').value = session.customer_name;
-                
-                const duration = session.duration_minutes || 0;
-                const hours = Math.floor(duration / 60);
-                const mins = duration % 60;
-                document.getElementById('endDuration').value = ${hours}小时分钟;
-                document.getElementById('endCost').value = '¥' + session.cost;
-                
+
+                document.getElementById('endRoomName').value = session.room_name || '';
+                document.getElementById('endCustomerName').value = session.customer_name || '';
+                document.getElementById('endDuration').value = fmtDuration(session.duration_minutes || 0);
+                document.getElementById('endCost').value = '¥' + (session.cost || 0).toFixed(2);
                 document.getElementById('endModal').classList.add('active');
             } catch (error) {
                 console.error('获取会话信息失败:', error);
+                showToast('获取会话信息失败', 'error');
             }
         }
-        
-        // 确认结束计时
+
         async function confirmEnd() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = '处理中...';
+
             try {
-                const response = await fetch(${API_BASE}/sessions//end, {
+                const response = await fetch(API_BASE + '/sessions/' + currentSessionId + '/end', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'}
+                    headers: { 'Content-Type': 'application/json' }
                 });
-                
+
                 if (response.ok) {
                     const session = await response.json();
-                    alert(结账成功！金额：¥);
                     closeModal('endModal');
-                    loadData();
+                    showToast('结账成功！金额 ¥' + (session.cost || 0).toFixed(2), 'success');
+                    await loadData();
                 } else {
-                    const error = await response.json();
-                    alert(error.error || '结束计时失败');
+                    const err = await response.json().catch(function () { return {}; });
+                    showToast(err.error || '结束计时失败', 'error');
                 }
             } catch (error) {
                 console.error('结束计时失败:', error);
+                showToast('网络错误', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '确认结账';
             }
         }
-        
-        // 关闭模态框
+
+        function showAddRoomModal() {
+            document.getElementById('newRoomName').value = '';
+            document.getElementById('newRoomConsole').value = 'PS5';
+            document.getElementById('newRoomRate').value = 30;
+            document.getElementById('addRoomModal').classList.add('active');
+        }
+
+        async function confirmAddRoom() {
+            const name = document.getElementById('newRoomName').value.trim();
+            const consoleType = document.getElementById('newRoomConsole').value;
+            const rate = parseFloat(document.getElementById('newRoomRate').value);
+
+            if (!name) {
+                showToast('请输入包间名称', 'error');
+                return;
+            }
+
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = '处理中...';
+
+            try {
+                const response = await fetch(API_BASE + '/rooms', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: name,
+                        console_type: consoleType,
+                        hourly_rate: rate
+                    })
+                });
+
+                if (response.ok) {
+                    closeModal('addRoomModal');
+                    showToast('新增包间成功！', 'success');
+                    await loadData();
+                } else {
+                    const err = await response.json().catch(function () { return {}; });
+                    showToast(err.error || '新增失败', 'error');
+                }
+            } catch (error) {
+                console.error('新增包间失败:', error);
+                showToast('网络错误', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '确认新增';
+            }
+        }
+
+        function askDeleteRoom(roomId, roomName) {
+            deleteRoomId = roomId;
+            document.getElementById('deleteRoomText').textContent = '确定要删除包间【' + roomName + '】吗？该操作可在数据库中恢复。';
+            document.getElementById('deleteRoomModal').classList.add('active');
+        }
+
+        async function confirmDeleteRoom() {
+            if (!deleteRoomId) return;
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = '处理中...';
+
+            try {
+                const response = await fetch(API_BASE + '/rooms/' + deleteRoomId, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    closeModal('deleteRoomModal');
+                    showToast('包间已删除', 'success');
+                    await loadData();
+                } else {
+                    const err = await response.json().catch(function () { return {}; });
+                    showToast(err.error || '删除失败', 'error');
+                }
+            } catch (error) {
+                console.error('删除包间失败:', error);
+                showToast('网络错误', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '确认删除';
+                deleteRoomId = null;
+            }
+        }
+
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('active');
         }
-        
-        // 初始化包间
+
         async function initRooms() {
-            if (!confirm('确定要初始化默认包间吗？')) return;
-            
+            if (!confirm('确定要初始化默认包间吗？已有同名包间会被跳过。')) return;
+
+            const btn = event.target;
+            btn.disabled = true;
+            const oldText = btn.textContent;
+            btn.textContent = '初始化中...';
+
             try {
-                const response = await fetch(${API_BASE}/rooms/init, {method: 'POST'});
+                const response = await fetch(API_BASE + '/rooms/init', { method: 'POST' });
+                const data = await response.json().catch(function () { return {}; });
+
                 if (response.ok) {
-                    alert('包间初始化成功！');
-                    loadData();
+                    showToast(data.message || '包间初始化成功！', 'success');
+                    await loadData();
+                } else {
+                    showToast(data.message || data.error || '初始化失败', 'error');
                 }
             } catch (error) {
                 console.error('初始化包间失败:', error);
+                showToast('网络错误', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = oldText;
             }
         }
-        
-        // 定时更新计时器
+
         function updateTimers() {
-            const timerElements = document.querySelectorAll('[id^=""timer-""]');
-            timerElements.forEach(el => {
-                const roomId = el.id.replace('timer-', '');
-                // 重新获取该包间的状态
-                fetch(${API_BASE}/rooms//status)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.in_use && data.session) {
-                            const duration = data.session.duration_minutes || 0;
-                            const hours = Math.floor(duration / 60);
-                            const mins = duration % 60;
-                            el.textContent = ${hours}:;
+            const timerElements = document.querySelectorAll('[data-room-id]');
+            if (!timerElements.length) return;
+            fetch(API_BASE + '/rooms/status/all')
+                .then(function (res) { return res.json(); })
+                .then(function (rooms) {
+                    rooms.forEach(function (room) {
+                        if (!room.in_use) return;
+                        const el = document.querySelector('[data-room-id="' + room.room.id + '"]');
+                        if (el) {
+                            const session = room.session;
+                            el.textContent = fmtClock(session.duration_minutes || 0);
                         }
-                    })
-                    .catch(console.error);
-            });
+                    });
+                })
+                .catch(console.error);
         }
-        
-        // 页面加载完成后执行
-        document.addEventListener('DOMContentLoaded', () => {
+
+        document.addEventListener('DOMContentLoaded', function () {
             loadData();
-            // 每分钟更新一次计时器
-            setInterval(updateTimers, 60000);
+            setInterval(updateTimers, 30000);
         });
-        
-        // 点击模态框外部关闭
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                }
+
+        document.querySelectorAll('.modal').forEach(function (modal) {
+            modal.addEventListener('click', function (e) {
+                if (e.target === modal) modal.classList.remove('active');
             });
         });
     </script>

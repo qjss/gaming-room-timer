@@ -2,9 +2,9 @@
 from app import db
 
 class Room(db.Model):
-    """"""
+    """
     包间表
-    """"""
+    """
     __tablename__ = 'rooms'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -26,9 +26,9 @@ class Room(db.Model):
         }
 
 class Session(db.Model):
-    """"""
+    """
     计时会话表
-    """"""
+    """
     __tablename__ = 'sessions'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -62,9 +62,9 @@ class Session(db.Model):
         return 0
 
 class Setting(db.Model):
-    """"""
+    """
     系统设置表
-    """"""
+    """
     __tablename__ = 'settings'
     
     id = db.Column(db.Integer, primary_key=True)

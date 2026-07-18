@@ -7,9 +7,9 @@ timer_bp = Blueprint('timer', __name__)
 
 @timer_bp.route('/api/sessions', methods=['GET'])
 def get_sessions():
-    """"""
+    """
     获取所有会话
-    """"""
+    """
     active_only = request.args.get('active', 'false').lower() == 'true'
     
     if active_only:
@@ -28,9 +28,9 @@ def get_sessions():
 
 @timer_bp.route('/api/sessions/<int:session_id>', methods=['GET'])
 def get_session(session_id):
-    """"""
+    """
     获取单个会话
-    """"""
+    """
     session = Session.query.get_or_404(session_id)
     session_dict = session.to_dict()
     session_dict['room_name'] = session.room.name if session.room else None
@@ -39,9 +39,9 @@ def get_session(session_id):
 
 @timer_bp.route('/api/rooms/<int:room_id>/start', methods=['POST'])
 def start_session(room_id):
-    """"""
+    """
     开始计时
-    """"""
+    """
     room = Room.query.get_or_404(room_id)
     
     # 检查该包间是否已有活跃会话
@@ -63,9 +63,9 @@ def start_session(room_id):
 
 @timer_bp.route('/api/sessions/<int:session_id>/end', methods=['POST'])
 def end_session(session_id):
-    """"""
+    """
     结束计时
-    """"""
+    """
     session = Session.query.get_or_404(session_id)
     
     if session.status != 'active':
@@ -83,9 +83,9 @@ def end_session(session_id):
 
 @timer_bp.route('/api/rooms/<int:room_id>/status', methods=['GET'])
 def get_room_status(room_id):
-    """"""
+    """
     获取包间状态（是否在使用中）
-    """"""
+    """
     room = Room.query.get_or_404(room_id)
     active_session = Session.query.filter_by(room_id=room_id, status='active').first()
     
@@ -108,9 +108,9 @@ def get_room_status(room_id):
 
 @timer_bp.route('/api/rooms/status/all', methods=['GET'])
 def get_all_rooms_status():
-    """"""
+    """
     获取所有包间的状态概览
-    """"""
+    """
     rooms = Room.query.filter_by(is_active=True).all()
     result = []
     
@@ -136,9 +136,9 @@ def get_all_rooms_status():
 
 @timer_bp.route('/api/statistics', methods=['GET'])
 def get_statistics():
-    """"""
+    """
     获取统计数据
-    """"""
+    """
     from sqlalchemy import func
     
     # 今日会话数

@@ -6,25 +6,25 @@ rooms_bp = Blueprint('rooms', __name__)
 
 @rooms_bp.route('/api/rooms', methods=['GET'])
 def get_rooms():
-    """"""
+    """
     获取所有包间
-    """"""
+    """
     rooms = Room.query.filter_by(is_active=True).all()
     return jsonify([room.to_dict() for room in rooms])
 
 @rooms_bp.route('/api/rooms/<int:room_id>', methods=['GET'])
 def get_room(room_id):
-    """"""
+    """
     获取单个包间
-    """"""
+    """
     room = Room.query.get_or_404(room_id)
     return jsonify(room.to_dict())
 
 @rooms_bp.route('/api/rooms', methods=['POST'])
 def create_room():
-    """"""
+    """
     创建新包间
-    """"""
+    """
     data = request.json
     room = Room(
         name=data.get('name'),
@@ -37,9 +37,9 @@ def create_room():
 
 @rooms_bp.route('/api/rooms/<int:room_id>', methods=['PUT'])
 def update_room(room_id):
-    """"""
+    """
     更新包间信息
-    """"""
+    """
     room = Room.query.get_or_404(room_id)
     data = request.json
     
@@ -57,9 +57,9 @@ def update_room(room_id):
 
 @rooms_bp.route('/api/rooms/<int:room_id>', methods=['DELETE'])
 def delete_room(room_id):
-    """"""
+    """
     删除包间（软删除）
-    """"""
+    """
     room = Room.query.get_or_404(room_id)
     room.is_active = False
     db.session.commit()
@@ -67,9 +67,9 @@ def delete_room(room_id):
 
 @rooms_bp.route('/api/rooms/init', methods=['POST'])
 def init_rooms():
-    """"""
+    """
     初始化默认包间
-    """"""
+    """
     default_rooms = [
         {'name': '包间1', 'console_type': 'PS5', 'hourly_rate': 30.0},
         {'name': '包间2', 'console_type': 'PS5', 'hourly_rate': 30.0},

@@ -1,34 +1,41 @@
 ﻿# Render Blueprint - 电玩店包间计时管理系统
-# 
+#
 # 使用方法:
-# 1. Fork 这个仓库到你的 GitHub
+# 1. 确保你已经 fork 了本仓库
 # 2. 登录 Render (https://render.com)
-# 3. 点击 ""New"" -> ""Blueprint""
-# 4. 连接你的 GitHub 仓库
-# 5. Render 会自动读取这个文件并创建服务
+# 3. 点击 "New" -> "Blueprint"
+# 4. 选择你的 GitHub 仓库 (gaming-room-timer)
+# 5. Render 会自动读取本文件并创建 Web 服务 + PostgreSQL 数据库
+
+databases:
+  # 免费版 PostgreSQL（90 天后会休眠，但免费空间持续可用）
+  - name: gaming-room-db
+    plan: free
+    databaseName: gaming_room
+    user: gaming_room
+    ipAllowList: []  # 允许所有 IP 访问（同 Region 默认内网访问）
 
 services:
-  # Web 应用
+  # Flask Web 应用
   - type: web
     name: gaming-room-timer
     env: python
+    region: singapore  # 离中国最近的节点
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
-    plan: free
     healthCheckPath: /
-    regions:
-      - singapore  # 离中国较近的节点
+    autoDeploy: true  # 推送代码自动部署
     envVars:
+      # 数据库连接自动从上面创建的 PostgreSQL 服务注入
       - key: DATABASE_URL
-        sync: false  # 你需要在 Render 后台设置这个
+        fromDatabase:
+          name: gaming-room-db
+          property: connectionString
+      # 自动生成一个随机的 SECRET_KEY
       - key: SECRET_KEY
         generateValue: true
       - key: FLASK_ENV
         value: production
-
-  # PostgreSQL 数据库
-  - type: postgres
-    name: gaming-room-db
-    plan: free
-    ipAllowList: []  # 允许所有 IP 访问
-    databaseName: gaming_room
+      - key: PYTHON_VERSION
+        value: 3.11.0
